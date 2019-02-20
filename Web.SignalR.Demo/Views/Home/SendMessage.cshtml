@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewData["Title"] = "SendMessage";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        <h2>Chat Application Demo</h2>
+        <input type="text" id="message" placeholder="Enter Message" />
+        <input type="button" id="publishMessage" value="Send" />
+       
+       
+    </div>
+</div>
+<br/>
+<div class="row">
+    <div class="col-md-6">
+        <ul id="reports"></ul>
+    </div>
+</div>
+    @section scripts {
+        <script>
+        $(function () {
+
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("http://localhost:5000/InfosPublisher")
+                .configureLogging(signalR.LogLevel.Information)
+                .build();
+
+            connection.start({ withCredentials: false }).catch(err => console.error(err.toString()));
+
+            $("#publishMessage").click(function () {
+
+                var MessageInfo =
+                {
+                    UserName: "@ViewData["UserName"]",
+                    UserMessage: $('#message').val()
+                };
+
+                connection.invoke('PublishInfo', MessageInfo);
+            });
+
+
+            connection.on('OnInfoPublished', data => {
+                $('#reports').append($('<li>').html('<b> ' + data.userName + ' </b> : ' + data.userMessage));
+                $('#message').val('');
+            });
+
+        });
+        </script>
+    }

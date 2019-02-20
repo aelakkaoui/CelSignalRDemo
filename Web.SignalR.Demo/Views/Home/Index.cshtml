@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Chat Application Demo</h2>
+        <ul>
+            <li>@Html.ActionLink("User1","SendMessage","Home",new { userName= "User1" }) </li>
+            <li>@Html.ActionLink("User2", "SendMessage", "Home", new { userName = "User2" })</li>
+        </ul>
+    </div>
+   
+</div>
